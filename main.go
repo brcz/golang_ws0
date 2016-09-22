@@ -1,3 +1,28 @@
+//go:generate swagger generate spec
+// swagger:meta
+// Package main.
+//
+// Provides API to operate with tasks
+//
+//     Schemes: http, https
+//     Host: localhost
+//     BasePath: /v2
+//     Version: 0.0.1
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+//
+
+
+// @APIVersion 1.0.0
+// @APITitle TODO tasks API
+// @APIDescription API to operate with tasks
+// @BasePath http://localhost:8081/todo/
+
 package main
 
 import (

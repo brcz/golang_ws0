@@ -3,11 +3,20 @@ package main
 import "strconv"
 
 // model file can interact with REST service and with DB
-
+// swagger:model
 type Task struct {
-	Id            int64    `json:"id,omitempty"`
+    // the id for this user
+    //
+    // required: true
+    // min: 1
+	Id            int64    `required json:"id,omitempty"`
+    
+    // required: true
+    // min length: 3
 	Alias         string   `json:"alias,omitempty"`
-	Description   string   `json:"desc,omitempty"`
+	
+    // required: true
+    Description   string   `json:"desc,omitempty"`
 	Task_type     string   `json:"type,omitempty"`
 	Tags          []string `json:"tags,omitempty"`
 	Timestamp     int32    `json:"ts,omitempty"`

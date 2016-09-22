@@ -7,6 +7,24 @@ import (
 
 	"github.com/abiosoft/river"
 )
+// swagger:route GET /todo/:id getTODORecord Task getTODORecord 
+//
+// Fetch TODO task by id or alias.
+//
+// This will show task by given id or alias.
+//
+//     Consumes:
+//     - application/x-www-form-urlencoded
+//
+//     Produces:
+//     - application/json
+//
+//     Schemes: http, https
+//
+//     Responses:
+//       default: notFound
+//       200: task
+
 
 // getTODORecord handles GET /todo/:id.
 func getTODORecord(c *river.Context, model Model) {
