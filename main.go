@@ -39,8 +39,8 @@ func main() {
 	TODOHandler.Register(TODOModel(db))
 	rv.Handle("/todo", TODOHandler)
 
-	log.Println("Server ready. Listening on *:8080...")
-	log.Fatal(http.ListenAndServe(":8080", rv))
+	log.Println("Server ready. Listening on *:8081...")
+	log.Fatal(http.ListenAndServe(":8081", rv))
 }
 
 //Step3: create connection with DB, docker-compose should be used for launch DB

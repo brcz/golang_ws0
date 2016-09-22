@@ -8,7 +8,7 @@ import (
 	"github.com/abiosoft/river"
 )
 
-// getUser handles GET /user/:id.
+// getTODORecord handles GET /todo/:id.
 func getTODORecord(c *river.Context, model Model) {
 	task := model.get(c.Param("id"))
 	if task == nil {
@@ -18,12 +18,12 @@ func getTODORecord(c *river.Context, model Model) {
 	c.Render(http.StatusOK, task)
 }
 
-// getAllUser handles GET /user.
+// getTODOList handles GET /todo.
 func getTODOList(c *river.Context, model Model) {
 	c.Render(http.StatusOK, model.getAll())
 }
 
-// addUser handles POST /user.
+// addTODORecord handles POST /todo.
 func addTODORecord(c *river.Context, model Model) {
 	var tasks TaskList
 	if err := c.DecodeJSONBody(&tasks); err != nil {
@@ -36,7 +36,7 @@ func addTODORecord(c *river.Context, model Model) {
 	c.Render(http.StatusCreated, tasks)
 }
 
-// updateUser handles PUT /user/:id.
+// updateTODORecord handles PUT /todo/:id.
 func updateTODORecord(c *river.Context, model Model) {
 	id := c.Param("id")
 	var task Task
@@ -44,13 +44,13 @@ func updateTODORecord(c *river.Context, model Model) {
 		c.Render(http.StatusBadRequest, err)
 		return
 	}
-	_ = id
-	//model.put(id, user)
+
+	model.put(id, task)
 	c.Render(http.StatusOK, task)
 }
 
-// deleteUser handles DELETE /user/:id.
+// deleteTODORecord handles DELETE /todo/:id.
 func deleteTODORecord(c *river.Context, model Model) {
-	//model.delete(c.Param("id"))
+	model.delete(c.Param("id"))
 	c.RenderEmpty(http.StatusNoContent)
 }

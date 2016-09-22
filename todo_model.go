@@ -50,14 +50,44 @@ func TODOModel(db dbDriver) Model {
 	model.get = func(id string) interface{} {
 		int64_id, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			return nil
+			if tasks, err2 := db.ReadByAlias(&id); err2 == nil {
+				return tasks
+			}
+			return err
 		}
 
 		if tasks, err := db.ReadById(&int64_id); err == nil {
 			return tasks
 		}
 
-		return nil
+		return err
+	}
+
+	model.put = func(id string, item interface{}) {
+		var updateTask Task
+		int64_id, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return
+		}
+		updateTask  = item.(Task)
+		updateTask.Id = int64_id
+		err = db.Update(updateTask)
+		if err != nil {
+			return
+		}
+		return
+	}
+
+	model.delete = func(id string) {
+		int64_id, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return
+		}
+		err = db.Delete(Task{Id:int64_id})
+		if err != nil {
+			return
+		}
+		return
 	}
 
 	return model
