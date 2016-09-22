@@ -7,7 +7,7 @@ import (
 
 	"github.com/abiosoft/river"
 )
-// swagger:route GET /todo/:id getTODORecord Task getTODORecord 
+// swagger:route GET /:id getTODORecord Task getTODORecord
 //
 // Fetch TODO task by id or alias.
 //

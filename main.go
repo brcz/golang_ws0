@@ -1,12 +1,13 @@
-//go:generate swagger generate spec
-// swagger:meta
-// Package main.
+// Package main TODO API.
+//
+// the purpose of this application is to provide an application
+// that is using plain go code to define an API
 //
 // Provides API to operate with tasks
 //
 //     Schemes: http, https
 //     Host: localhost
-//     BasePath: /v2
+//     BasePath: /todo
 //     Version: 0.0.1
 //
 //     Consumes:
@@ -16,12 +17,8 @@
 //     - application/json
 //
 //
+// swagger:meta
 
-
-// @APIVersion 1.0.0
-// @APITitle TODO tasks API
-// @APIDescription API to operate with tasks
-// @BasePath http://localhost:8081/todo/
 
 package main
 
