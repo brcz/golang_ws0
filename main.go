@@ -1,3 +1,4 @@
+//go:generate swagger generate spec
 // Package main TODO API.
 //
 // the purpose of this application is to provide an application
@@ -41,13 +42,14 @@ type dbDriver interface {
 	Delete(t Task) error
 }
 
-var db dbDriver
+
 
 func main() {
-
+    
 	log.Println("Server init")
 
-	db := &dbSqLite{handler: connect2Db()}
+	//var db dbDriver
+    db := &dbSqLite{handler: connect2Db()}
 
 	rv := river.New()
 	//Step2: Create API to handles such type of calls or use exists routes

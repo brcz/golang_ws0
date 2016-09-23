@@ -24,6 +24,10 @@ import (
 //     Responses:
 //       default: notFound
 //       200: task
+type renderInerface interface {
+    Render(int, interface{})
+    DecodeJSONBody(*interface{}) error
+}
 
 
 // getTODORecord handles GET /todo/:id.
@@ -37,6 +41,7 @@ func getTODORecord(c *river.Context, model Model) {
 }
 
 // getTODOList handles GET /todo.
+//func getTODOList(c renderInerface, model Model) {
 func getTODOList(c *river.Context, model Model) {
 	c.Render(http.StatusOK, model.getAll())
 }
