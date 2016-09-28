@@ -29,14 +29,14 @@ func (db *dbSqLite) Create(t Task) error {
 
 	stmt, err := db.handler.Prepare(sql_additem)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(t.Alias, t.Description, t.Task_type, strings.Join(t.Tags, ","), t.Timestamp, t.Estimate_time, t.Real_time, strings.Join(t.Reminders, ","))
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return err
 	}
 	return nil
@@ -52,7 +52,7 @@ func (db *dbSqLite) ReadById(id *int64) (TaskList, error) {
     `
 	stmt, err := db.handler.Prepare(sql_readall)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil, err
 	}
 	defer stmt.Close()
@@ -60,7 +60,7 @@ func (db *dbSqLite) ReadById(id *int64) (TaskList, error) {
 	rows, err := stmt.Query(sql_readall, id)
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil, err
 	}
 
@@ -73,7 +73,7 @@ func (db *dbSqLite) ReadById(id *int64) (TaskList, error) {
 		t := Task{}
 		err = rows.Scan(&t.Id, &t.Alias, &t.Description, &t.Task_type, &t.Timestamp, &t.Estimate_time, &t.Real_time, &dbTags, &dbReminders)
 		if err != nil {
-			panic(err)
+			//panic(err)
 			return nil, err
 		}
 		t.Tags = strings.Split(dbTags, ",")
@@ -92,7 +92,7 @@ func (db *dbSqLite) ReadByAlias(alias *string) (TaskList, error) {
     `
 	stmt, err := db.handler.Prepare(sql_readall)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil, err
 	}
 	defer stmt.Close()
@@ -100,7 +100,7 @@ func (db *dbSqLite) ReadByAlias(alias *string) (TaskList, error) {
 	rows, err := stmt.Query(sql_readall, alias)
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil, err
 	}
 
@@ -113,7 +113,7 @@ func (db *dbSqLite) ReadByAlias(alias *string) (TaskList, error) {
 		t := Task{}
 		err = rows.Scan(&t.Id, &t.Alias, &t.Description, &t.Task_type, &t.Timestamp, &t.Estimate_time, &t.Real_time, &dbTags, &dbReminders)
 		if err != nil {
-			panic(err)
+			//panic(err)
 			return nil, err
 		}
 		t.Tags = strings.Split(dbTags, ",")
@@ -141,14 +141,14 @@ func (db *dbSqLite) Update(t Task) error {
 
 	stmt, err := db.handler.Prepare(sql_updateitem)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(t.Id, t.Alias, t.Description, t.Task_type, strings.Join(t.Tags, ","), t.Timestamp, t.Estimate_time, t.Real_time, strings.Join(t.Reminders, ","))
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return err
 	}
 	return nil
@@ -157,7 +157,7 @@ func (db *dbSqLite) Delete(t Task) error {
 	sql_delete := `DELETE FROM tasks WHERE id=?`
 	stmt, err := db.handler.Prepare(sql_delete)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return  err
 	}
 	defer stmt.Close()
@@ -165,7 +165,7 @@ func (db *dbSqLite) Delete(t Task) error {
 	_, err = stmt.Query(sql_delete, t.Id)
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return err
 	}
 	return nil
@@ -179,7 +179,7 @@ func (db *dbSqLite) ReadAll() (TaskList, error) {
 
 	rows, err := db.handler.Query(sql_readall)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -192,7 +192,7 @@ func (db *dbSqLite) ReadAll() (TaskList, error) {
 
 		err = rows.Scan(&t.Id, &t.Alias, &t.Description, &t.Task_type, &t.Timestamp, &t.Estimate_time, &t.Real_time, &dbTags, &dbReminders)
 		if err != nil {
-			panic(err)
+			//panic(err)
 			return nil, err
 		}
 		t.Tags = strings.Split(dbTags, ",")

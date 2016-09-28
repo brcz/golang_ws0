@@ -17,7 +17,6 @@
 //     Produces:
 //     - application/json
 //
-//
 // swagger:meta
 
 
@@ -45,7 +44,7 @@ type dbDriver interface {
 
 
 func main() {
-    
+
 	log.Println("Server init")
 
 	//var db dbDriver

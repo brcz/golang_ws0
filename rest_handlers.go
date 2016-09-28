@@ -32,18 +32,27 @@ type renderInerface interface {
 
 // getTODORecord handles GET /todo/:id.
 func getTODORecord(c *river.Context, model Model) {
-	task := model.get(c.Param("id"))
-	if task == nil {
-		c.RenderEmpty(http.StatusNotFound)
-		return
+	modelData := model.get(c.Param("id"))
+	if modelData.status != nil {
+		c.Render(http.StatusNotFound, modelData.status)
+	} else {
+		c.Render(http.StatusOK, modelData.result)
 	}
-	c.Render(http.StatusOK, task)
 }
 
 // getTODOList handles GET /todo.
 //func getTODOList(c renderInerface, model Model) {
 func getTODOList(c *river.Context, model Model) {
-	c.Render(http.StatusOK, model.getAll())
+	modelData := model.getAll()
+	if modelData.status != nil {
+		c.Render(http.StatusNoContent, modelData.status)
+	} else {
+		c.Render(http.StatusOK, modelData.result)
+	}
+}
+
+func getTODOListExt(c *river.Context, model Model) {
+	//c.Render(http.StatusOK, model.getAll())
 }
 
 // addTODORecord handles POST /todo.
@@ -54,7 +63,11 @@ func addTODORecord(c *river.Context, model Model) {
 		return
 	}
 	for i := range tasks {
-		model.add(tasks[i])
+		modelData := model.add(tasks[i])
+		if modelData.status != nil {
+			c.Render(http.StatusInternalServerError, modelData.status)
+			return
+		}
 	}
 	c.Render(http.StatusCreated, tasks)
 }
@@ -68,12 +81,20 @@ func updateTODORecord(c *river.Context, model Model) {
 		return
 	}
 
-	model.put(id, task)
+	modelData := model.put(id, task)
+	if modelData.status != nil {
+		c.Render(http.StatusInternalServerError, modelData.status)
+		return
+	}
 	c.Render(http.StatusOK, task)
 }
 
 // deleteTODORecord handles DELETE /todo/:id.
 func deleteTODORecord(c *river.Context, model Model) {
-	model.delete(c.Param("id"))
-	c.RenderEmpty(http.StatusNoContent)
+	modelData := model.delete(c.Param("id"))
+	if modelData.status != nil {
+		c.Render(http.StatusInternalServerError, modelData.status)
+	} else {
+		c.RenderEmpty(http.StatusNoContent)
+	}
 }
