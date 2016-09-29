@@ -7,25 +7,19 @@ import (
 
 	"github.com/abiosoft/river"
 	_ "github.com/mattn/go-sqlite3"
+    "gopkg.in/mgo.v2"
 )
 
-//Step3: Implement of interaction with database
-type dbDriver interface {
-	Create(t Task) error
-	ReadById(id *int64) (TaskList, error)
-	ReadByAlias(alias *string) (TaskList, error)
-	ReadAll() (TaskList, error)
-	Update(t Task) error
-	Delete(t Task) error
-}
-
-var db dbDriver
 
 func main() {
 
 	log.Println("Server init")
 
-	db := &dbSqLite{handler: connect2Db()}
+	//db := &dbSqLite{handler: connect2Db()}
+    
+    db := &dbMongoDB{session: connect2Mongo(), dbName: "ws-0", collection:"tasks"}
+    defer db.session.Close()
+
 
 	rv := river.New()
 	//Step2: Create API to handles such type of calls or use exists routes
@@ -44,7 +38,7 @@ func main() {
 }
 
 //Step3: create connection with DB, docker-compose should be used for launch DB
-func connect2Db() *sql.DB {
+func connect2Sqlite() *sql.DB {
 	db, err := sql.Open("sqlite3", "sq3_database.db")
 	if err != nil {
 		panic(err)
@@ -54,4 +48,13 @@ func connect2Db() *sql.DB {
 	}
 	CreateTable(db)
 	return db
+}
+
+func connect2Mongo() *mgo.Session {
+    session, err := mgo.Dial("localhost, mongo.brcz.mk.ua")
+    if err != nil {
+        panic(err)
+    }
+    
+    return session
 }

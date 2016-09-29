@@ -16,6 +16,8 @@ type Task struct {
 	Reminders     []string `json:"reminders,omitempty"`
 }
 
+//type TaskTags  string
+
 type TaskList []Task
 
 var Tasks TaskList
