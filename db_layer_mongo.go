@@ -1,12 +1,12 @@
 package main
 
 import (
-        "fmt"
-        //"log"
-        "errors"
+        
+        //"strconv"
+        
         
         "gopkg.in/mgo.v2"
-        //"gopkg.in/mgo.v2/bson"
+        "gopkg.in/mgo.v2/bson"
         )
 
 type dbMongoDB struct {
@@ -17,29 +17,55 @@ type dbMongoDB struct {
 
 func (db *dbMongoDB) Create(t Task) error {
     c := db.session.DB(db.dbName).C(db.collection)
+    
+    // TODO: add id generation
+    //hexStr := bson.NewObjectId().Hex()
+    //t.Id = strconv.ParseInt(hexStr, 16, 64)
+    
     err := c.Insert(&t)
     return err
 }
+
 func (db *dbMongoDB) ReadById(id *int64) (TaskList, error) {
-    fmt.Println("mockDB.ReadById")
-    return nil, errors.New("no such id")
+    
+    var tasks TaskList
+    
+    c := db.session.DB(db.dbName).C(db.collection)
+    err := c.Find(bson.M{"Id": id}).All(&tasks)
+    return tasks, err
+    
 }
+
 func (db *dbMongoDB) ReadByAlias(alias *string) (TaskList, error) {
-    fmt.Println("mockDB.ReadByAlias")
-    task := mockTask(Task{Alias:"go-dms-workshop"}) //,Tags:["Golang", "Workshop", "DMS"]
-    return TaskList{task}, nil
+    var tasks TaskList
+    
+    c := db.session.DB(db.dbName).C(db.collection)
+    err := c.Find(bson.M{"Alias": alias}).All(&tasks)
+    return tasks, err
+    
 }
+
 func (db *dbMongoDB) Update(t Task) error {
-    return nil
+    
+    c := db.session.DB(db.dbName).C(db.collection)
+    err := c.Update(bson.M{"Id": t.Id}, &t)
+        
+    return err
+    
 }
+
 func (db *dbMongoDB) Delete(t Task) error {
-    return errors.New("Delete not supported")
+    c := db.session.DB(db.dbName).C(db.collection)
+    err := c.Remove(bson.M{"Id": t.Id})
+    
+    return err
 }
+
 func (db *dbMongoDB) ReadAll() (TaskList, error) {
     var tasks TaskList
     
     c := db.session.DB(db.dbName).C(db.collection)
-    err := c.Find().All(&tasks)
+    err := c.Find(nil).All(&tasks)
     
     return tasks, err
 }

@@ -15,10 +15,10 @@ func main() {
 
 	log.Println("Server init")
 
-	//db := &dbSqLite{handler: connect2Db()}
-    
-    db := &dbMongoDB{session: connect2Mongo(), dbName: "ws-0", collection:"tasks"}
-    defer db.session.Close()
+	db := &dbSqLite{handler: connect2Sqlite()}
+    defer db.handler.Close()
+    //db := &dbMongoDB{session: connect2Mongo(), dbName: "ws-0", collection:"tasks"}
+    //defer db.session.Close()
 
 
 	rv := river.New()
