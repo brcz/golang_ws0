@@ -1,3 +1,25 @@
+//go:generate swagger generate spec
+// Package main TODO API.
+//
+// the purpose of this application is to provide an application
+// that is using plain go code to define an API
+//
+// Provides API to operate with tasks
+//
+//     Schemes: http, https
+//     Host: localhost
+//     BasePath: /todo
+//     Version: 0.0.1
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:meta
+
+
 package main
 
 import (
@@ -19,13 +41,14 @@ type dbDriver interface {
 	Delete(t Task) error
 }
 
-var db dbDriver
+
 
 func main() {
 
 	log.Println("Server init")
 
-	db := &dbSqLite{handler: connect2Db()}
+	//var db dbDriver
+    db := &dbSqLite{handler: connect2Db()}
 
 	rv := river.New()
 	//Step2: Create API to handles such type of calls or use exists routes
