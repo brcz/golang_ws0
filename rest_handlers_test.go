@@ -192,11 +192,11 @@ func BenchmarkGetTODOList(b *testing.B) {
 	}
 }
 
-func requestGetTODOList(url string) {
-	//resp, err :=
-	http.Get(fmt.Sprintf("%s/todo", url))
+//func requestGetTODOList(url string) {
+    /* * /
+	resp, err := http.Get(fmt.Sprintf("%s/todo", url))
 
-	/*
+
 	   if err != nil {
 	       //t.Fatal(err)
 	   }
@@ -209,8 +209,8 @@ func requestGetTODOList(url string) {
 	   if err != nil {
 	       //t.Fatal(err)
 	   }
-	*/
-}
+	/* */
+//}
 
 func BenchmarkGetTODOListExt(b *testing.B) {
 	mockDB := &mockDB{}
