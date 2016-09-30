@@ -28,7 +28,7 @@ import (
 
 	"github.com/abiosoft/river"
 	_ "github.com/mattn/go-sqlite3"
-    "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2"
 )
 
 
@@ -37,10 +37,9 @@ func main() {
 	log.Println("Server init")
 
 	db := &dbSqLite{handler: connect2Sqlite()}
-    defer db.handler.Close()
-    //db := &dbMongoDB{session: connect2Mongo(), dbName: "ws-0", collection:"tasks"}
-    //defer db.session.Close()
-
+	defer db.handler.Close()
+	//db := &dbMongoDB{session: connect2Mongo(), dbName: "ws-0", collection:"tasks"}
+	//defer db.session.Close()
 
 	rv := river.New()
 	//Step2: Create API to handles such type of calls or use exists routes
@@ -73,10 +72,10 @@ func connect2Sqlite() *sql.DB {
 }
 
 func connect2Mongo() *mgo.Session {
-    session, err := mgo.Dial("localhost, mongo.brcz.mk.ua")
-    if err != nil {
-        panic(err)
-    }
-    
-    return session
+	session, err := mgo.Dial("localhost, mongo.brcz.mk.ua")
+	if err != nil {
+		panic(err)
+	}
+
+	return session
 }

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
-	//"io/ioutil"
+	"io/ioutil"
 	"net/http/httptest"
-	//"github.com/abiosoft/river"
+	"github.com/abiosoft/river"
 )
 
 const (
@@ -140,79 +140,77 @@ func TestGetTODOListExt(t *testing.T) {
 }
 
 func TestGetTODOList(t *testing.T) {
-    /* * /
-	req, err := http.NewRequest("GET", "/todo", nil)
-    if err != nil {
-        t.Fatal(err)
-    }
-    /* */
+	/* * /
+		req, err := http.NewRequest("GET", "/todo", nil)
+	    if err != nil {
+	        t.Fatal(err)
+	    }
+	    /* */
 
-    //rec := httptest.NewRecorder()
+	//rec := httptest.NewRecorder()
 
-    //create mockup db object
-    mockDB := &mockDB{}
+	//create mockup db object
+	mockDB := &mockDB{}
 
-    rv := river.New()
-    TODOHandler := river.NewEndpoint().Get("/", getTODOList)
-    TODOHandler.Register(TODOModel(mockDB))
-    rv.Handle("/todo", TODOHandler)
+	rv := river.New()
+	TODOHandler := river.NewEndpoint().Get("/", getTODOList)
+	TODOHandler.Register(TODOModel(mockDB))
+	rv.Handle("/todo", TODOHandler)
 
+	server := httptest.NewServer(rv)
+	defer server.Close()
 
-    server := httptest.NewServer(rv)
-    defer server.Close()
-
-    //fmt.Println("url=",server.URL)
-    resp, err := http.Get(fmt.Sprintf("%s/todo", server.URL))
-    if err != nil {
-        t.Fatal(err)
-    }
-    if resp.StatusCode != 200 {
-        t.Fatalf("Received non-200 response: %d\n", resp.StatusCode)
-    }
-    //expected := fmt.Sprintf("count: %d.", i)
-    actual, err := ioutil.ReadAll(resp.Body)
-    fmt.Println("got result:", string(actual))
-    if err != nil {
-        t.Fatal(err)
-    }
+	//fmt.Println("url=",server.URL)
+	resp, err := http.Get(fmt.Sprintf("%s/todo", server.URL))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resp.StatusCode != 200 {
+		t.Fatalf("Received non-200 response: %d\n", resp.StatusCode)
+	}
+	//expected := fmt.Sprintf("count: %d.", i)
+	actual, err := ioutil.ReadAll(resp.Body)
+	fmt.Println("got result:", string(actual))
+	if err != nil {
+		t.Fatal(err)
+	}
 }
-    func BenchmarkGetTODOList(b *testing.B) {
-        mockDB := &mockDB{}
-        
-        rv := river.New()
-        TODOHandler := river.NewEndpoint().Get("/", getTODOList)
-        TODOHandler.Register(TODOModel(mockDB))
-        rv.Handle("/todo", TODOHandler)
-        
-        
-        server := httptest.NewServer(rv)
-        defer server.Close()
-        
-        // run the  function b.N times
-        for n := 0; n < b.N; n++ {
-            requestGetTODOList(server.URL)
-        }
-    }
-    
-    func requestGetTODOList(url string) {
-        //resp, err :=
-        http.Get(fmt.Sprintf("%s/todo", url))
-        
-        /*
-        if err != nil {
-            //t.Fatal(err)
-        }
-        if resp.StatusCode != 200 {
-            //t.Fatalf("Received non-200 response: %d\n", resp.StatusCode)
-        }
-        
-        actual, err := ioutil.ReadAll(resp.Body)
-        fmt.Println("got result:", string(actual))
-        if err != nil {
-            //t.Fatal(err)
-        }
-         */
-    }
+func BenchmarkGetTODOList(b *testing.B) {
+	mockDB := &mockDB{}
+
+	rv := river.New()
+	TODOHandler := river.NewEndpoint().Get("/", getTODOList)
+	TODOHandler.Register(TODOModel(mockDB))
+	rv.Handle("/todo", TODOHandler)
+
+	server := httptest.NewServer(rv)
+	defer server.Close()
+
+	// run the  function b.N times
+	for n := 0; n < b.N; n++ {
+		requestGetTODOList(server.URL)
+	}
+}
+
+func requestGetTODOList(url string) {
+	//resp, err :=
+	http.Get(fmt.Sprintf("%s/todo", url))
+
+	/*
+	   if err != nil {
+	       //t.Fatal(err)
+	   }
+	   if resp.StatusCode != 200 {
+	       //t.Fatalf("Received non-200 response: %d\n", resp.StatusCode)
+	   }
+
+	   actual, err := ioutil.ReadAll(resp.Body)
+	   fmt.Println("got result:", string(actual))
+	   if err != nil {
+	       //t.Fatal(err)
+	   }
+	*/
+}
 
 func BenchmarkGetTODOListExt(b *testing.B) {
 	mockDB := &mockDB{}
