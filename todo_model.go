@@ -5,18 +5,18 @@ import "strconv"
 // model file can interact with REST service and with DB
 // swagger:model
 type Task struct {
-    // the id for this user
-    //
-    // required: true
-    // min: 1
-	Id            int64    `required json:"id,omitempty"`
+	// the id for this user
+	//
+	// required: true
+	// min: 1
+	Id int64 `required json:"id,omitempty"`
 
-    // required: true
-    // min length: 3
-	Alias         string   `json:"alias,omitempty"`
+	// required: true
+	// min length: 3
+	Alias string `json:"alias,omitempty"`
 
-   // required: true
-   Description   string   `json:"desc,omitempty"`
+	// required: true
+	Description   string   `json:"desc,omitempty"`
 	Task_type     string   `json:"type,omitempty"`
 	Tags          []string `json:"tags,omitempty"`
 	Timestamp     int32    `json:"ts,omitempty"`
@@ -32,7 +32,7 @@ type TaskList []Task
 var Tasks TaskList
 
 type modelResult struct {
-	result interface {}
+	result interface{}
 	status error
 }
 
@@ -88,7 +88,7 @@ func TODOModel(db dbDriver) Model {
 		if err != nil {
 			return modelResult{nil, err}
 		}
-		updateTask  = item.(Task)
+		updateTask = item.(Task)
 		updateTask.Id = int64_id
 		err = db.Update(updateTask)
 		if err != nil {
@@ -102,7 +102,7 @@ func TODOModel(db dbDriver) Model {
 		if err != nil {
 			return modelResult{nil, err}
 		}
-		err = db.Delete(Task{Id:int64_id})
+		err = db.Delete(Task{Id: int64_id})
 		if err != nil {
 			return modelResult{nil, err}
 		}

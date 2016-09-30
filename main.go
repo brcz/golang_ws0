@@ -1,3 +1,24 @@
+//go:generate swagger generate spec
+// Package main TODO API.
+//
+// the purpose of this application is to provide an application
+// that is using plain go code to define an API
+//
+// Provides API to operate with tasks
+//
+//     Schemes: http, https
+//     Host: localhost
+//     BasePath: /todo
+//     Version: 0.0.1
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:meta
+
 package main
 
 import (
@@ -23,14 +44,15 @@ func main() {
 
 	rv := river.New()
 	//Step2: Create API to handles such type of calls or use exists routes
+	dm := TODOModel(db)
 	TODOHandler := river.NewEndpoint().
-		Post("/", addTODORecord).
-		Get("/", getTODOList).
-		Get("/:id", getTODORecord).
-		Put("/:id", updateTODORecord).
-		Delete("/:id", deleteTODORecord)
+		Post("/", addTODORecordExt(dm)).
+		Get("/", getTODOListExt(dm)).
+		Get("/:id", getTODORecordExt(dm)).
+		Put("/:id", updateTODORecordExt(dm)).
+		Delete("/:id", deleteTODORecordExt(dm))
 
-	TODOHandler.Register(TODOModel(db))
+	//TODOHandler.Register(TODOModel(db))
 	rv.Handle("/todo", TODOHandler)
 
 	log.Println("Server ready. Listening on *:8081...")
