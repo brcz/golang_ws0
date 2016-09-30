@@ -175,6 +175,7 @@ func TestGetTODOList(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+/*
 func BenchmarkGetTODOList(b *testing.B) {
 	mockDB := &mockDB{}
 
