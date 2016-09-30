@@ -3,10 +3,19 @@ package main
 import "strconv"
 
 // model file can interact with REST service and with DB
-
+// swagger:model
 type Task struct {
-	Id            int64    `json:"id,omitempty"`
-	Alias         string   `json:"alias,omitempty"`
+	// the id for this user
+	//
+	// required: true
+	// min: 1
+	Id int64 `required json:"id,omitempty"`
+
+	// required: true
+	// min length: 3
+	Alias string `json:"alias,omitempty"`
+
+	// required: true
 	Description   string   `json:"desc,omitempty"`
 	Task_type     string   `json:"type,omitempty"`
 	Tags          []string `json:"tags,omitempty"`
@@ -16,78 +25,88 @@ type Task struct {
 	Reminders     []string `json:"reminders,omitempty"`
 }
 
+//type TaskTags  string
+
 type TaskList []Task
 
 var Tasks TaskList
 
+type modelResult struct {
+	result interface{}
+	status error
+}
+
 type Model struct {
-	get    func(id string) interface{}
-	getAll func() interface{}
-	add    func(items ...interface{})
-	put    func(id string, item interface{})
-	delete func(id string)
+	get    func(id string) modelResult
+	getAll func() modelResult
+	add    func(items ...interface{}) modelResult
+	put    func(id string, item interface{}) modelResult
+	delete func(id string) modelResult
 }
 
 func TODOModel(db dbDriver) Model {
 
 	var model Model
 
-	model.add = func(items ...interface{}) {
+	model.add = func(items ...interface{}) modelResult {
 		for i := range items {
-			//Tasks = append(Tasks, items[i].(Task))
-			db.Create(items[i].(Task))
+			err := db.Create(items[i].(Task))
+			if err != nil {
+				return modelResult{nil, err}
+			}
 		}
+		return modelResult{items, nil}
 	}
 
-	model.getAll = func() interface{} {
+	model.getAll = func() modelResult {
 		tasks, err := db.ReadAll()
 		if err != nil {
-			return nil
+			return modelResult{nil, err}
 		}
-		return tasks
+		return modelResult{tasks, nil}
 	}
 
-	model.get = func(id string) interface{} {
+	model.get = func(id string) modelResult {
 		int64_id, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
 			if tasks, err2 := db.ReadByAlias(&id); err2 == nil {
-				return tasks
+				return modelResult{tasks, nil}
 			}
-			return err
+			return modelResult{nil, err}
 		}
 
 		if tasks, err := db.ReadById(&int64_id); err == nil {
-			return tasks
+			return modelResult{tasks, nil}
 		}
 
-		return err
+		return modelResult{nil, err}
 	}
 
-	model.put = func(id string, item interface{}) {
+	model.put = func(id string, item interface{}) modelResult {
 		var updateTask Task
 		int64_id, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			return
+			return modelResult{nil, err}
 		}
-		updateTask  = item.(Task)
+		updateTask = item.(Task)
 		updateTask.Id = int64_id
 		err = db.Update(updateTask)
 		if err != nil {
-			return
+			return modelResult{nil, err}
 		}
-		return
+		return modelResult{item, nil}
 	}
 
-	model.delete = func(id string) {
+	model.delete = func(id string) modelResult {
 		int64_id, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			return
+			return modelResult{nil, err}
 		}
-		err = db.Delete(Task{Id:int64_id})
+		err = db.Delete(Task{Id: int64_id})
 		if err != nil {
-			return
+			return modelResult{nil, err}
 		}
-		return
+		return modelResult{nil, nil}
 	}
 
 	return model
